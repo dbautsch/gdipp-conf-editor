@@ -1,0 +1,126 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAIN DIALOGEX 0, 0, 640, 283
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_MINIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_OVERLAPPEDWINDOW
+CAPTION "GDIPP Configuration Editor"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Auto hinting",IDC_STATIC,16,22,152,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO1,178,22,185,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Use embedded bitmap",IDC_STATIC,16,41,152,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO2,179,40,185,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Embolden",IDC_STATIC,16,56,152,12,SS_CENTERIMAGE
+    LTEXT           "LCD filter",IDC_STATIC,16,75,152,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO4,178,75,185,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Gamma value",IDC_STATIC,16,92,152,12,SS_CENTERIMAGE
+    LTEXT           "Hinting",IDC_STATIC,16,107,152,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO6,178,107,185,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Kerning",IDC_STATIC,16,124,152,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO7,178,124,185,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Pixel geometry",IDC_STATIC,16,141,152,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO8,178,141,185,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Renderer",IDC_STATIC,16,159,152,12,SS_CENTERIMAGE
+    LTEXT           "Shadow offset",IDC_STATIC,16,177,152,12,SS_CENTERIMAGE
+    LTEXT           "Shadow alpha",IDC_STATIC,16,195,152,12,SS_CENTERIMAGE
+    PUSHBUTTON      "Save configuration",IDC_SAVE_CONFIGURATION,229,262,72,14
+    PUSHBUTTON      "Update preview",IDC_UPDATE_PREVIEW,304,262,72,14
+    GROUPBOX        "Preview",IDC_STATIC,383,7,250,210
+    GROUPBOX        "GDIPP configuration options",IDC_STATIC,7,7,369,228
+    EDITTEXT        IDC_EDIT1,179,157,184,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT2,179,57,184,14,ES_AUTOHSCROLL
+    LTEXT           "Aliased text",IDC_STATIC,15,210,152,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO12,177,210,185,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_EDIT3,179,90,184,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT4,179,175,184,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT5,178,192,184,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "About",IDC_ABOUT,7,262,50,14
+    PUSHBUTTON      "Help",IDC_SHOW_HELP,65,262,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_MAIN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 633
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 276
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
