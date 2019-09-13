@@ -25,6 +25,8 @@
 #include <windows.h>
 #include <string>
 
+#include "gdipp_configuration_values.h"
+
 namespace GDIPPConfiguration
 {
     class Values;
@@ -46,6 +48,7 @@ namespace GDIPPConfigurationEditor
         HWND hwnd;
         std::string cmdLine;
         int showCmd;
+        GDIPPConfiguration::Values values;
 
         static INT_PTR MainDlgProc(HWND hwnd,
                                    UINT msg,
@@ -55,9 +58,12 @@ namespace GDIPPConfigurationEditor
         std::string GetGDIPPDirectory() const;
         GDIPPConfiguration::Values GetValuesFromControls() const;
         void ApplyValuesToControls(const GDIPPConfiguration::Values & values);
+        void InitializeGUI();
+        void ComboBoxById_AddString(int controlId, const TCHAR * text);
 
         // application events
         void OnInitApplication();
+        void OnShowMainWindow();
 
         // button click events
         void OnClickSaveConfiguration();

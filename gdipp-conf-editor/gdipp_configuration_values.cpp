@@ -28,9 +28,11 @@ namespace GDIPPConfiguration
 {
     Values::Values()
     {
+        embeddedBitmap = INT_MIN;
         embolden = INT_MIN;
-        int hinting = INT_MIN;
+        hinting = INT_MIN;
         kerning = INT_MIN;
+        renderer = INT_MIN;
     }
 
     Values::ValidationResult Values::Validate() const
@@ -54,7 +56,7 @@ namespace GDIPPConfiguration
             validationResult.incorrectValues.push_back("lcd_filter");
         }
 
-        if (gamma.empty())
+        if (gamma.GetR().empty() || gamma.GetG().empty() || gamma.GetB().empty())
         {
             validationResult.incorrectValues.push_back("gamma");
         }
@@ -69,9 +71,16 @@ namespace GDIPPConfiguration
             validationResult.incorrectValues.push_back("kerning");
         }
 
-        if (renderMode == RenderMode::NotSet)
+        if (renderMode.GetGrayMode() == RenderMode::NotSet ||
+            renderMode.GetMonoMode() == RenderMode::NotSet ||
+            renderMode.GetSubpixelMode() == RenderMode::NotSet)
         {
             validationResult.incorrectValues.push_back("render_mode");
+        }
+
+        if (renderer == INT_MIN)
+        {
+            validationResult.incorrectValues.push_back("renderer");
         }
 
         if (pixelGeometry == PixelGeometry::NotSet)

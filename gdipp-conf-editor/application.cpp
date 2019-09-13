@@ -29,6 +29,7 @@
 #include "gdipp_configuration_values.h"
 
 #include <commctrl.h>
+#include <windowsx.h>
 
 #pragma comment(lib, "Comctl32.lib")
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' ""version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -89,6 +90,11 @@ namespace GDIPPConfigurationEditor
 
         switch (msg)
         {
+        case WM_SHOWWINDOW:
+            {
+                app->OnShowMainWindow();
+                break;
+            }
         case WM_INITDIALOG:
             {
                 app = reinterpret_cast<Application*>(lparam);
@@ -160,6 +166,72 @@ namespace GDIPPConfigurationEditor
 
     }
 
+    void Application::InitializeGUI()
+    {
+        /*
+        *   Fill comboboxes & initialize other controls.
+        */
+
+        // autohinting
+        ComboBoxById_AddString(IDC_AUTOHINTING, TEXT("FALSE"));
+        ComboBoxById_AddString(IDC_AUTOHINTING, TEXT("TRUE"));
+
+        // embedded bitmap
+        ComboBoxById_AddString(IDC_EMBEDDED_BITMAP, TEXT("FALSE"));
+        ComboBoxById_AddString(IDC_EMBEDDED_BITMAP, TEXT("TRUE"));
+
+        // LCD filter
+        ComboBoxById_AddString(IDC_LCDFILTER, TEXT("None"));
+        ComboBoxById_AddString(IDC_LCDFILTER, TEXT("Default"));
+        ComboBoxById_AddString(IDC_LCDFILTER, TEXT("Light"));
+        ComboBoxById_AddString(IDC_LCDFILTER, TEXT("Legacy"));
+
+        // Hinting
+        ComboBoxById_AddString(IDC_HINTING, TEXT("0"));
+        ComboBoxById_AddString(IDC_HINTING, TEXT("1"));
+        ComboBoxById_AddString(IDC_HINTING, TEXT("2"));
+        ComboBoxById_AddString(IDC_HINTING, TEXT("3"));
+
+        // Kerning
+        ComboBoxById_AddString(IDC_KERNING, TEXT("FALSE"));
+        ComboBoxById_AddString(IDC_KERNING, TEXT("TRUE"));
+
+        // Render mode (monochromatic)
+        ComboBoxById_AddString(IDC_RENDERMODE_MONO, TEXT("Disabled"));
+        ComboBoxById_AddString(IDC_RENDERMODE_MONO, TEXT("Auto"));
+        ComboBoxById_AddString(IDC_RENDERMODE_MONO, TEXT("Forced"));
+
+        // Render mode (gray)
+        ComboBoxById_AddString(IDC_RENDERMODE_GRAYSCALE, TEXT("Disabled"));
+        ComboBoxById_AddString(IDC_RENDERMODE_GRAYSCALE, TEXT("Auto"));
+        ComboBoxById_AddString(IDC_RENDERMODE_GRAYSCALE, TEXT("Forced"));
+
+        // Render mode (subpixel)
+        ComboBoxById_AddString(IDC_RENDERMODE_SUBPIXEL, TEXT("Disabled"));
+        ComboBoxById_AddString(IDC_RENDERMODE_SUBPIXEL, TEXT("Auto"));
+        ComboBoxById_AddString(IDC_RENDERMODE_SUBPIXEL, TEXT("Forced"));
+
+        // Pixel geometry
+        ComboBoxById_AddString(IDC_PIXELGEOMETRY, TEXT("RGB"));
+        ComboBoxById_AddString(IDC_PIXELGEOMETRY, TEXT("BGR"));
+
+        // Aliased text
+        ComboBoxById_AddString(IDC_ALIASEDTEXT, TEXT("FALSE"));
+        ComboBoxById_AddString(IDC_ALIASEDTEXT, TEXT("TRUE"));
+    }
+
+    void Application::ComboBoxById_AddString(int controlId, const TCHAR * text)
+    {
+        HWND controlHwnd = GetDlgItem(hwnd, controlId);
+
+        if (controlHwnd == NULL)
+        {
+            throw std::runtime_error("ListBoxById_AddString: control not found.");
+        }
+
+        ComboBox_AddString(controlHwnd, text);
+    }
+
     // application events
     void Application::OnInitApplication()
     {
@@ -174,7 +246,13 @@ namespace GDIPPConfigurationEditor
         }
 
         GDIPPConfiguration::Reader reader(configurationDirectory + "\\gdipp_setting.xml");
-        ApplyValuesToControls(reader.GetValues());
+        values = reader.GetValues();
+    }
+
+    void Application::OnShowMainWindow()
+    {
+        InitializeGUI();
+        ApplyValuesToControls(values);
     }
 
     // button click events

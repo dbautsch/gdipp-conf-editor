@@ -26,6 +26,8 @@
 #include <vector>
 #include <sstream>
 
+#include "util.h"
+
 namespace GDIPPConfiguration
 {
     class Values
@@ -138,45 +140,99 @@ namespace GDIPPConfiguration
         public:
             RenderMode()
             {
-                value = NotSet;
+                monoMode = NotSet;
+                grayMode = NotSet;
+                subpixelMode = NotSet;
             }
 
-            RenderMode(const std::string & textValue)
+            RenderMode(const std::string & monoMode,
+                       const std::string & grayMode,
+                       const std::string & subpixelMode)
             {
-                std::stringstream str(textValue);
-                int number;
-                str >> number;
+                int monoModeValue = Util::TryIntFromStr(monoMode, INT_MIN);
+                int grayModeValue = Util::TryIntFromStr(grayMode, INT_MIN);
+                int subpixelModeValue = Util::TryIntFromStr(subpixelMode, INT_MIN);
 
-                if (number == static_cast<int>(Mono) ||
-                    number == static_cast<int>(Grayscale) ||
-                    number == static_cast<int>(Subpixel))
+                if (Util::ValueInRange(monoModeValue, Disabled, Forced))
                 {
-                    value = static_cast<Modes>(number);
+                    this->monoMode = static_cast<Modes>(monoModeValue);
+                }
+
+                if (Util::ValueInRange(grayModeValue, Disabled, Forced))
+                {
+                    this->grayMode = static_cast<Modes>(grayModeValue);
+                }
+
+                if (Util::ValueInRange(subpixelModeValue, Disabled, Forced))
+                {
+                    this->subpixelMode = static_cast<Modes>(subpixelModeValue);
                 }
             }
 
             enum Modes
             {
                 NotSet = -1,
-                Mono = 0,
-                Grayscale = 1,
-                Subpixel = 2
+                Disabled = 0,
+                Auto = 1,
+                Forced = 2
             };
 
-            RenderMode & operator=(RenderMode::Modes mode)
+            Modes GetMonoMode() const
             {
-                value = mode;
-                return * this;
+                return monoMode;
             }
 
-            bool operator==(RenderMode::Modes mode) const
+            Modes GetGrayMode() const
             {
-                return value == mode;
+                return grayMode;
+            }
+
+            Modes GetSubpixelMode() const
+            {
+                return subpixelMode;
             }
 
         private:
-            Modes value;
+            Modes monoMode;
+            Modes grayMode;
+            Modes subpixelMode;
         };
+
+        class Gamma
+        {
+        public:
+            Gamma()
+            {
+                r = g = b = std::string("");
+            }
+
+            Gamma(const std::string & r,
+                  const std::string & g,
+                  const std::string & b)
+                  : r(r), g(g), b(b)
+            {
+
+            }
+
+            std::string GetR() const
+            {
+                return r;
+            }
+
+            std::string GetG() const
+            {
+                return g;
+            }
+
+            std::string GetB() const
+            {
+                return b;
+            }
+
+        private:
+            std::string r, g, b;
+        };
+
 
         class PixelGeometry
         {
@@ -222,12 +278,14 @@ namespace GDIPPConfiguration
         };
 
         AutoHintingMode autoHintingMode;
+        int embeddedBitmap;
         int embolden;
         LCDFilter lcdFilter;
-        std::string gamma;
+        Gamma gamma;
         int hinting;
         int kerning;
         RenderMode renderMode;
+        int renderer;
         PixelGeometry pixelGeometry;
     };
 };

@@ -24,6 +24,7 @@
 
 #include "gdipp_configuration_values.h"
 #include "pugixml/pugixml.hpp"
+#include "util.h"
 
 #include <exception>
 
@@ -59,7 +60,68 @@ namespace GDIPPConfiguration
 
                 if (lcdFilterNode.empty() == false)
                 {
-                    
+                    values.lcdFilter = std::string(lcdFilterNode.first_child().value());
+                }
+            }
+
+            pugi::xml_node fontNode = doc.child("font");
+
+            if (fontNode.empty() == false)
+            {
+                pugi::xml_node autoHintingNode = fontNode.child("auto_hinting");
+                pugi::xml_node embeddedBitmapNode = fontNode.child("embedded_bitmap");
+                pugi::xml_node emboldenNode = fontNode.child("embolden");
+                pugi::xml_node gammaNode = fontNode.child("gamma");
+                pugi::xml_node hintingNode = fontNode.child("hinting");
+                pugi::xml_node kerningNode = fontNode.child("kerning");
+                pugi::xml_node rendererModeNode = fontNode.child("render_mode");
+                pugi::xml_node rendererNode = fontNode.child("renderer");
+                pugi::xml_node shadowNode = fontNode.child("shadow");
+
+                if (autoHintingNode.empty() == false)
+                {
+                    values.autoHintingMode = std::string(autoHintingNode.first_child().value());
+                }
+
+                if (embeddedBitmapNode.empty() == false)
+                {
+                    values.embeddedBitmap = 
+                        Util::TryIntFromStr(embeddedBitmapNode.first_child().value(), INT_MIN);
+                }
+
+                if (emboldenNode.empty() == false)
+                {
+                    values.embolden = Util::TryIntFromStr(emboldenNode.first_child().value(), INT_MIN);
+                }
+
+                if (gammaNode.empty() == false)
+                {
+
+                }
+
+                if (hintingNode.empty() == false)
+                {
+                    values.hinting = Util::TryIntFromStr(hintingNode.first_child().value(), INT_MIN);
+                }
+
+                if (kerningNode.empty() == false)
+                {
+                    values.kerning = Util::TryIntFromStr(kerningNode.first_child().value(), INT_MIN);
+                }
+
+                if (rendererModeNode.empty() == false)
+                {
+
+                }
+
+                if (rendererNode.empty() == false)
+                {
+                    values.renderer = Util::TryIntFromStr(rendererNode.first_child().value(), INT_MIN);
+                }
+
+                if (shadowNode.empty() == false)
+                {
+
                 }
             }
         }
