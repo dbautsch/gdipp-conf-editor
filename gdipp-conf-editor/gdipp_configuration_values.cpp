@@ -33,63 +33,90 @@ namespace GDIPPConfiguration
         hinting = INT_MIN;
         kerning = INT_MIN;
         renderer = INT_MIN;
+        aliasedText = INT_MIN;
     }
 
     Values::ValidationResult Values::Validate() const
     {
-        /// TODO
-
         ValidationResult validationResult;
 
         if (autoHintingMode == AutoHintingMode::NotSet)
         {
-            validationResult.incorrectValues.push_back("auto_hinting");
+            validationResult.AppendIncorrectValue("auto_hinting");
         }
 
         if (embolden < -1000 || embolden > 1000)
         {
-            validationResult.incorrectValues.push_back("embolden");
+            validationResult.AppendIncorrectValue("embolden");
         }
 
         if (lcdFilter == LCDFilter::NotSet)
         {
-            validationResult.incorrectValues.push_back("lcd_filter");
+            validationResult.AppendIncorrectValue("lcd_filter");
         }
 
-        if (gamma.GetR().empty() || gamma.GetG().empty() || gamma.GetB().empty())
+        if (gamma.GetR().empty())
         {
-            validationResult.incorrectValues.push_back("gamma");
+            validationResult.AppendIncorrectValue("gamma.red");
+        }
+
+        if (gamma.GetG().empty())
+        {
+            validationResult.AppendIncorrectValue("gamma.green");
+        }
+
+        if (gamma.GetB().empty())
+        {
+            validationResult.AppendIncorrectValue("gamma.blue");
         }
 
         if (hinting < 0 || hinting > 3)
         {
-            validationResult.incorrectValues.push_back("hinting");
+            validationResult.AppendIncorrectValue("hinting");
         }
 
         if (kerning < 0 || kerning > 1)
         {
-            validationResult.incorrectValues.push_back("kerning");
+            validationResult.AppendIncorrectValue("kerning");
         }
 
         if (renderMode.GetGrayMode() == RenderMode::NotSet ||
             renderMode.GetMonoMode() == RenderMode::NotSet ||
             renderMode.GetSubpixelMode() == RenderMode::NotSet)
         {
-            validationResult.incorrectValues.push_back("render_mode");
+            validationResult.AppendIncorrectValue("render_mode");
         }
 
         if (renderer == INT_MIN)
         {
-            validationResult.incorrectValues.push_back("renderer");
+            validationResult.AppendIncorrectValue("renderer");
         }
 
         if (pixelGeometry == PixelGeometry::NotSet)
         {
-            validationResult.incorrectValues.push_back("pixel_geometry");
+            validationResult.AppendIncorrectValue("pixel_geometry");
+        }
+
+        if (shadow.GetOffsetX() == INT_MIN)
+        {
+            validationResult.AppendIncorrectValue("shadow.offset_x");
+        }
+
+        if (shadow.GetOffsetY() == INT_MIN)
+        {
+            validationResult.AppendIncorrectValue("shadow.offset_y");
+        }
+
+        if (shadow.GetAlpha() == INT_MIN)
+        {
+            validationResult.AppendIncorrectValue("shadow.alpha");
+        }
+
+        if (aliasedText == INT_MIN)
+        {
+            validationResult.AppendIncorrectValue("aliased_text");
         }
         
-        validationResult.status = (validationResult.incorrectValues.size() == 0);
-
         return validationResult;
     }
 } // namespace GDIPPConfiguration

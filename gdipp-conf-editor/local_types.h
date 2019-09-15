@@ -22,19 +22,10 @@
 
 #pragma once
 
-#include "local_types.h"
+#include <string>
 
-namespace GDIPPConfiguration
-{
-    class Values;
-
-    class Reader
-    {
-    public:
-        Reader(const MetaString & fileName);
-        GDIPPConfiguration::Values GetValues() const;
-
-    private:
-        MetaString fileName;
-    };
-};
+#if defined(UNICODE) || defined(_UNICODE)
+    typedef std::wstring MetaString;
+#else
+    typedef std::string MetaString;
+#endif

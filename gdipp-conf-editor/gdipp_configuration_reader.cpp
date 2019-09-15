@@ -30,7 +30,7 @@
 
 namespace GDIPPConfiguration
 {
-    Reader::Reader(const std::string fileName)
+    Reader::Reader(const MetaString & fileName)
         : fileName(fileName)
     {
 
@@ -64,7 +64,7 @@ namespace GDIPPConfiguration
                 }
             }
 
-            pugi::xml_node fontNode = doc.child("font");
+            pugi::xml_node fontNode = gdippNode.child("gdimm").child("font");
 
             if (fontNode.empty() == false)
             {
@@ -74,7 +74,7 @@ namespace GDIPPConfiguration
                 pugi::xml_node gammaNode = fontNode.child("gamma");
                 pugi::xml_node hintingNode = fontNode.child("hinting");
                 pugi::xml_node kerningNode = fontNode.child("kerning");
-                pugi::xml_node rendererModeNode = fontNode.child("render_mode");
+                pugi::xml_node renderModeNode = fontNode.child("render_mode");
                 pugi::xml_node rendererNode = fontNode.child("renderer");
                 pugi::xml_node shadowNode = fontNode.child("shadow");
 
@@ -96,7 +96,27 @@ namespace GDIPPConfiguration
 
                 if (gammaNode.empty() == false)
                 {
+                    pugi::xml_node gammaRNode = gammaNode.child("red");
+                    pugi::xml_node gammaGNode = gammaNode.child("green");
+                    pugi::xml_node gammaBNode = gammaNode.child("blue");
+                    MetaString r, g, b;
 
+                    if (!gammaRNode.empty())
+                    {
+                        r = gammaRNode.first_child().value();
+                    }
+
+                    if (!gammaGNode.empty())
+                    {
+                        g = gammaGNode.first_child().value();
+                    }
+
+                    if (!gammaBNode.empty())
+                    {
+                        b = gammaBNode.first_child().value();
+                    }
+
+                    values.gamma = GDIPPConfiguration::Values::Gamma(r, g, b);
                 }
 
                 if (hintingNode.empty() == false)
@@ -109,9 +129,45 @@ namespace GDIPPConfiguration
                     values.kerning = Util::TryIntFromStr(kerningNode.first_child().value(), INT_MIN);
                 }
 
-                if (rendererModeNode.empty() == false)
+                if (renderModeNode.empty() == false)
                 {
+                    pugi::xml_node monoNode = renderModeNode.child("mono");
+                    pugi::xml_node grayNode = renderModeNode.child("gray");
+                    pugi::xml_node subpixelNode = renderModeNode.child("subpixel");
+                    pugi::xml_node pixelGeometryNode = renderModeNode.child("pixel_geometry");
+                    pugi::xml_node aliasedTextNode = renderModeNode.child("aliased_text");
 
+                    MetaString mono, gray, subpixel;
+
+                    if (!monoNode.empty())
+                    {
+                        mono = monoNode.first_child().value();
+                    }
+
+                    if (!grayNode.empty())
+                    {
+                        gray = grayNode.first_child().value();
+                    }
+
+                    if (!subpixelNode.empty())
+                    {
+                        subpixel = subpixelNode.first_child().value();
+                    }
+
+                    values.renderMode = GDIPPConfiguration::Values::RenderMode(mono, gray, subpixel);
+
+                    if (!pixelGeometryNode.empty())
+                    {
+                        values.pixelGeometry 
+                            = GDIPPConfiguration::Values::PixelGeometry(
+                            pixelGeometryNode.first_child().value());
+                    }
+
+                    if (!aliasedTextNode.empty())
+                    {
+                        values.aliasedText = 
+                            Util::TryIntFromStr(aliasedTextNode.first_child().value(), INT_MIN);
+                    }
                 }
 
                 if (rendererNode.empty() == false)
@@ -121,7 +177,28 @@ namespace GDIPPConfiguration
 
                 if (shadowNode.empty() == false)
                 {
+                    pugi::xml_node offsetXNode = shadowNode.child("offset_x");
+                    pugi::xml_node offsetYNode = shadowNode.child("offset_y");
+                    pugi::xml_node alphaNode = shadowNode.child("alpha");
 
+                    int offsetX, offsetY, alpha;
+
+                    if (!offsetXNode.empty())
+                    {
+                        offsetX = Util::TryIntFromStr(offsetXNode.first_child().value(), INT_MIN);
+                    }
+
+                    if (!offsetYNode.empty())
+                    {
+                        offsetY = Util::TryIntFromStr(offsetYNode.first_child().value(), INT_MIN);
+                    }
+
+                    if (!alphaNode.empty())
+                    {
+                        alpha = Util::TryIntFromStr(alphaNode.first_child().value(), INT_MIN);
+                    }
+
+                    values.shadow = GDIPPConfiguration::Values::Shadow(offsetX, offsetY, alpha);
                 }
             }
         }

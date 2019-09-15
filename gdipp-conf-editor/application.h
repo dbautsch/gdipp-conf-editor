@@ -26,6 +26,7 @@
 #include <string>
 
 #include "gdipp_configuration_values.h"
+#include "local_types.h"
 
 namespace GDIPPConfiguration
 {
@@ -46,7 +47,7 @@ namespace GDIPPConfigurationEditor
     private:
         HINSTANCE thisInstance;
         HWND hwnd;
-        std::string cmdLine;
+        MetaString cmdLine;
         int showCmd;
         GDIPPConfiguration::Values values;
 
@@ -55,11 +56,13 @@ namespace GDIPPConfigurationEditor
                                    WPARAM wparam,
                                    LPARAM lparam);
 
-        std::string GetGDIPPDirectory() const;
+        MetaString GetGDIPPDirectory() const;
         GDIPPConfiguration::Values GetValuesFromControls() const;
         void ApplyValuesToControls(const GDIPPConfiguration::Values & values);
         void InitializeGUI();
-        void ComboBoxById_AddString(int controlId, const TCHAR * text);
+        void ComboBoxById_AddString(int controlId, const MetaString & text);
+        void ComboBoxById_SetCurSel(int controlId, int position);
+        void EditById_SetText(int controlId, const MetaString & text);
 
         // application events
         void OnInitApplication();

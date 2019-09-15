@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <string>
+#include "local_types.h"
 
 namespace GDIPPConfiguration
 {
@@ -31,10 +31,10 @@ namespace GDIPPConfiguration
     class Writer
     {
     public:
-        Writer(const std::string & fileName);
+        Writer(const MetaString & fileName);
         void Save(const GDIPPConfiguration::Values & values);
 
     private:
-        std::string fileName;
+        MetaString fileName;
     };
 };

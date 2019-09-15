@@ -163,7 +163,24 @@ namespace GDIPPConfigurationEditor
 
     void Application::ApplyValuesToControls(const GDIPPConfiguration::Values & values)
     {
-
+        ComboBoxById_SetCurSel(IDC_AUTOHINTING, values.autoHintingMode());
+        ComboBoxById_SetCurSel(IDC_EMBEDDED_BITMAP, values.embeddedBitmap);
+        EditById_SetText(IDC_EMBOLDEN, Util::IntToStr(values.embolden));
+        ComboBoxById_SetCurSel(IDC_LCDFILTER, values.lcdFilter());
+        EditById_SetText(IDC_GAMMA_R, values.gamma.GetR());
+        EditById_SetText(IDC_GAMMA_G, values.gamma.GetG());
+        EditById_SetText(IDC_GAMMA_B, values.gamma.GetB());
+        ComboBoxById_SetCurSel(IDC_HINTING, values.hinting);
+        ComboBoxById_SetCurSel(IDC_KERNING, values.kerning);
+        ComboBoxById_SetCurSel(IDC_PIXELGEOMETRY, values.pixelGeometry());
+        EditById_SetText(IDC_RENDERER, Util::IntToStr(values.renderer));
+        EditById_SetText(IDC_SHADOWOFFSET_X, Util::IntToStr(values.shadow.GetOffsetX()));
+        EditById_SetText(IDC_SHADOWOFFSET_Y, Util::IntToStr(values.shadow.GetOffsetY()));
+        EditById_SetText(IDC_SHADOWALPHA, Util::IntToStr(values.shadow.GetAlpha()));
+        ComboBoxById_SetCurSel(IDC_ALIASEDTEXT, values.aliasedText);
+        ComboBoxById_SetCurSel(IDC_RENDERMODE_MONO, values.renderMode.GetMonoMode());
+        ComboBoxById_SetCurSel(IDC_RENDERMODE_GRAYSCALE, values.renderMode.GetGrayMode());
+        ComboBoxById_SetCurSel(IDC_RENDERMODE_SUBPIXEL, values.renderMode.GetSubpixelMode());
     }
 
     void Application::InitializeGUI()
@@ -220,7 +237,7 @@ namespace GDIPPConfigurationEditor
         ComboBoxById_AddString(IDC_ALIASEDTEXT, TEXT("TRUE"));
     }
 
-    void Application::ComboBoxById_AddString(int controlId, const TCHAR * text)
+    void Application::ComboBoxById_AddString(int controlId, const MetaString & text)
     {
         HWND controlHwnd = GetDlgItem(hwnd, controlId);
 
@@ -229,7 +246,31 @@ namespace GDIPPConfigurationEditor
             throw std::runtime_error("ListBoxById_AddString: control not found.");
         }
 
-        ComboBox_AddString(controlHwnd, text);
+        ComboBox_AddString(controlHwnd, text.c_str());
+    }
+
+    void Application::ComboBoxById_SetCurSel(int controlId, int position)
+    {
+        HWND controlHwnd = GetDlgItem(hwnd, controlId);
+
+        if (controlHwnd == NULL)
+        {
+            throw std::runtime_error("ComboBoxById_SetCurSel: control not found.");
+        }
+
+        ComboBox_SetCurSel(controlHwnd, position);
+    }
+
+    void Application::EditById_SetText(int controlId, const MetaString & text)
+    {
+        HWND controlHwnd = GetDlgItem(hwnd, controlId);
+
+        if (controlHwnd == NULL)
+        {
+            throw std::runtime_error("ComboBoxById_SetCurSel: control not found.");
+        }
+
+        SetWindowText(controlHwnd, text.c_str());
     }
 
     // application events
@@ -247,6 +288,15 @@ namespace GDIPPConfigurationEditor
 
         GDIPPConfiguration::Reader reader(configurationDirectory + "\\gdipp_setting.xml");
         values = reader.GetValues();
+
+        GDIPPConfiguration::Values::ValidationResult validationResult = values.Validate();
+
+        if (validationResult.GetStatus() == false)
+        {
+            // XML configuration is incorrect or missing some values.
+            MetaString textReport = validationResult.GetTextReport();
+            throw std::runtime_error(textReport);
+        }
     }
 
     void Application::OnShowMainWindow()

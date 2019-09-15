@@ -12,4 +12,10 @@ namespace Util
 
         return value;
     }
+
+    MetaString IntToStr(int value)
+    {
+        std::stringstream stream(value);
+        return stream.str();
+    }
 } // namespace Util

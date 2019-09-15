@@ -38,8 +38,56 @@ namespace GDIPPConfiguration
         class ValidationResult
         {
         public:
-            bool status;
-            std::vector<std::string> incorrectValues;
+            ValidationResult()
+            {
+
+            }
+
+            ValidationResult(const std::vector<MetaString> & incorrectValues)
+                : incorrectValues(incorrectValues)
+            {
+
+            }
+
+            bool GetStatus() const
+            {
+                return incorrectValues.empty();
+            }
+
+            std::vector<MetaString> GetIncorrectValues() const
+            {
+                return incorrectValues;
+            }
+
+            void AppendIncorrectValue(const MetaString & value)
+            {
+                incorrectValues.push_back(value);
+            }
+
+            MetaString GetTextReport() const
+            {
+                std::stringstream stream;
+
+                stream << "Configuration XML file is missing following values:" << std::endl;
+
+                if (GetStatus())
+                {
+                    stream << "No missing values.";
+                }
+                else
+                {
+                    for (std::vector<MetaString>::const_iterator it = incorrectValues.begin();
+                         it != incorrectValues.end(); ++it)
+                    {
+                        stream << "* " << * it << std::endl;
+                    }
+                }
+
+                return stream.str();
+            }
+
+        private:
+            std::vector<MetaString> incorrectValues;
         };
 
         GDIPPConfiguration::Values::ValidationResult Validate() const;
@@ -52,7 +100,7 @@ namespace GDIPPConfiguration
                 value = NotSet;
             }
 
-            AutoHintingMode(const std::string & textValue)
+            AutoHintingMode(const MetaString & textValue)
             {
                 std::stringstream str(textValue);
                 int number;
@@ -84,6 +132,11 @@ namespace GDIPPConfiguration
                 return value == mode;
             }
 
+            int operator()() const
+            {
+                return static_cast<int>(value);
+            }
+
         private:
             Modes value;
         };
@@ -96,7 +149,7 @@ namespace GDIPPConfiguration
                 value = NotSet;
             }
 
-            LCDFilter(const std::string & textValue)
+            LCDFilter(const MetaString & textValue)
             {
                 std::stringstream str(textValue);
                 int number;
@@ -131,6 +184,11 @@ namespace GDIPPConfiguration
                 return value == mode;
             }
 
+            int operator()() const
+            {
+                return static_cast<int>(value);
+            }
+
         private:
             Modes value;
         };
@@ -145,9 +203,9 @@ namespace GDIPPConfiguration
                 subpixelMode = NotSet;
             }
 
-            RenderMode(const std::string & monoMode,
-                       const std::string & grayMode,
-                       const std::string & subpixelMode)
+            RenderMode(const MetaString & monoMode,
+                       const MetaString & grayMode,
+                       const MetaString & subpixelMode)
             {
                 int monoModeValue = Util::TryIntFromStr(monoMode, INT_MIN);
                 int grayModeValue = Util::TryIntFromStr(grayMode, INT_MIN);
@@ -203,34 +261,34 @@ namespace GDIPPConfiguration
         public:
             Gamma()
             {
-                r = g = b = std::string("");
+                r = g = b = MetaString("");
             }
 
-            Gamma(const std::string & r,
-                  const std::string & g,
-                  const std::string & b)
+            Gamma(const MetaString & r,
+                  const MetaString & g,
+                  const MetaString & b)
                   : r(r), g(g), b(b)
             {
 
             }
 
-            std::string GetR() const
+            MetaString GetR() const
             {
                 return r;
             }
 
-            std::string GetG() const
+            MetaString GetG() const
             {
                 return g;
             }
 
-            std::string GetB() const
+            MetaString GetB() const
             {
                 return b;
             }
 
         private:
-            std::string r, g, b;
+            MetaString r, g, b;
         };
 
 
@@ -242,7 +300,7 @@ namespace GDIPPConfiguration
                 value = NotSet;
             }
 
-            PixelGeometry(const std::string & textValue)
+            PixelGeometry(const MetaString & textValue)
             {
                 std::stringstream str(textValue);
                 int number;
@@ -273,8 +331,50 @@ namespace GDIPPConfiguration
                 return value == mode;
             }
 
+            int operator()() const
+            {
+                return static_cast<int>(value);
+            }
+
         private:
             Modes value;
+        };
+
+        class Shadow
+        {
+        public:
+            Shadow()
+            {
+                offsetX = INT_MIN;
+                offsetY = INT_MIN;
+                alpha = INT_MIN;
+            }
+
+            Shadow(int offsetX, int offsetY, int alpha)
+                : offsetX(offsetX), offsetY(offsetY), alpha(alpha)
+            {
+
+            }
+
+            int GetOffsetX() const
+            {
+                return offsetX;
+            }
+
+            int GetOffsetY() const
+            {
+                return offsetY;
+            }
+
+            int GetAlpha() const
+            {
+                return alpha;
+            }
+
+        private:
+            int offsetX;
+            int offsetY;
+            int alpha;
         };
 
         AutoHintingMode autoHintingMode;
@@ -287,5 +387,7 @@ namespace GDIPPConfiguration
         RenderMode renderMode;
         int renderer;
         PixelGeometry pixelGeometry;
+        Shadow shadow;
+        int aliasedText;
     };
 };
