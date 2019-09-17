@@ -191,6 +191,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\gdipp_preview.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
@@ -218,6 +222,10 @@
 			</File>
 			<File
 				RelativePath=".\gdipp_configuration_writer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\gdipp_preview.h"
 				>
 			</File>
 			<File

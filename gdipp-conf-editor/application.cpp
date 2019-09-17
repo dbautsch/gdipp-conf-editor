@@ -27,6 +27,7 @@
 #include "gdipp_configuration_reader.h"
 #include "gdipp_configuration_writer.h"
 #include "gdipp_configuration_values.h"
+#include "gdipp_preview.h"
 
 #include <commctrl.h>
 #include <windowsx.h>
@@ -42,7 +43,8 @@ namespace GDIPPConfigurationEditor
         :
             thisInstance(hinstance),
             cmdLine(cmdLine),
-            showCmd(showCmd)
+            showCmd(showCmd),
+            preview(NULL)
     {
 
     }
@@ -141,7 +143,7 @@ namespace GDIPPConfigurationEditor
 
         case WM_CLOSE:
             {
-                PostQuitMessage(0);
+                app->OnClose();
                 break;
             }
         }
@@ -303,6 +305,17 @@ namespace GDIPPConfigurationEditor
     {
         InitializeGUI();
         ApplyValuesToControls(values);
+
+        preview = new GDIPPPreview(hwnd, GetGDIPPDirectory());
+        preview->UpdateView();
+    }
+
+    void Application::OnClose()
+    {
+        delete preview;
+        preview = NULL;
+
+        PostQuitMessage(0);
     }
 
     // button click events
@@ -336,7 +349,7 @@ namespace GDIPPConfigurationEditor
 
     void Application::OnClickUpdatePreview()
     {
-
+        preview->UpdateView();
     }
 
     void Application::OnClickAbout()

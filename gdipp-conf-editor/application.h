@@ -33,6 +33,8 @@ namespace GDIPPConfiguration
     class Values;
 }
 
+class GDIPPPreview;
+
 namespace GDIPPConfigurationEditor
 {
     class Application
@@ -50,6 +52,7 @@ namespace GDIPPConfigurationEditor
         MetaString cmdLine;
         int showCmd;
         GDIPPConfiguration::Values values;
+        GDIPPPreview * preview;
 
         static INT_PTR MainDlgProc(HWND hwnd,
                                    UINT msg,
@@ -67,6 +70,7 @@ namespace GDIPPConfigurationEditor
         // application events
         void OnInitApplication();
         void OnShowMainWindow();
+        void OnClose();
 
         // button click events
         void OnClickSaveConfiguration();
