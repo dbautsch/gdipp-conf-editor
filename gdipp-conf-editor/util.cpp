@@ -15,7 +15,8 @@ namespace Util
 
     MetaString IntToStr(int value)
     {
-        std::stringstream stream(value);
+        std::stringstream stream;
+        stream << value;
         return stream.str();
     }
 } // namespace Util
