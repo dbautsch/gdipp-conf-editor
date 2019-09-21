@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdipp-conf-editor", "gdipp-conf-editor\gdipp-conf-editor.vcproj", "{98CB9B79-4A22-48C8-82BD-A7E8FC34060F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdipp_demo_render", "gdipp_demo_render\gdipp_demo_render.vcproj", "{FDF020E7-D855-420F-AC53-A191A390EA5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{98CB9B79-4A22-48C8-82BD-A7E8FC34060F}.Debug|Win32.Build.0 = Debug|Win32
 		{98CB9B79-4A22-48C8-82BD-A7E8FC34060F}.Release|Win32.ActiveCfg = Release|Win32
 		{98CB9B79-4A22-48C8-82BD-A7E8FC34060F}.Release|Win32.Build.0 = Release|Win32
+		{FDF020E7-D855-420F-AC53-A191A390EA5D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FDF020E7-D855-420F-AC53-A191A390EA5D}.Debug|Win32.Build.0 = Debug|Win32
+		{FDF020E7-D855-420F-AC53-A191A390EA5D}.Release|Win32.ActiveCfg = Release|Win32
+		{FDF020E7-D855-420F-AC53-A191A390EA5D}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
