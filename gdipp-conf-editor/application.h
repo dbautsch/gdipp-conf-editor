@@ -65,12 +65,15 @@ namespace GDIPPConfigurationEditor
         void InitializeGUI();
         void ComboBoxById_AddString(int controlId, const MetaString & text);
         void ComboBoxById_SetCurSel(int controlId, int position);
+        int ComboBoxById_GetCurSel(int controlId) const;
         void EditById_SetText(int controlId, const MetaString & text);
+        MetaString EditById_GetText(int controlId) const;
 
         // application events
         void OnInitApplication();
         void OnShowMainWindow();
         void OnClose();
+        void OnPaint();
 
         // button click events
         void OnClickSaveConfiguration();

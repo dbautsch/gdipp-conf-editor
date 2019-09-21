@@ -141,6 +141,15 @@ namespace GDIPPConfigurationEditor
                 break;
             }
 
+        case WM_PAINT:
+            {
+                if (app != NULL)
+                {
+                    app->OnPaint();
+                }
+                break;
+            }
+
         case WM_CLOSE:
             {
                 app->OnClose();
@@ -263,6 +272,18 @@ namespace GDIPPConfigurationEditor
         ComboBox_SetCurSel(controlHwnd, position);
     }
 
+    int Application::ComboBoxById_GetCurSel(int controlId) const
+    {
+        HWND controlHwnd = GetDlgItem(hwnd, controlId);
+
+        if (controlHwnd == NULL)
+        {
+            throw std::runtime_error("ComboBoxById_SetCurSel: control not found.");
+        }
+
+        return ComboBox_GetCurSel(controlHwnd);
+    }
+
     void Application::EditById_SetText(int controlId, const MetaString & text)
     {
         HWND controlHwnd = GetDlgItem(hwnd, controlId);
@@ -273,6 +294,34 @@ namespace GDIPPConfigurationEditor
         }
 
         SetWindowText(controlHwnd, text.c_str());
+    }
+
+    MetaString Application::EditById_GetText(int controlId) const
+    {
+        TCHAR * windowText = NULL;
+        int windowTextLength;
+
+        HWND controlHwnd = GetDlgItem(hwnd, controlId);
+
+        if (controlHwnd == NULL)
+        {
+            throw std::runtime_error("ComboBoxById_SetCurSel: control not found.");
+        }
+
+        windowTextLength = GetWindowTextLength(controlHwnd);
+
+        if (windowTextLength == 0)
+        {
+            return MetaString();
+        }
+
+        windowText = new TCHAR[windowTextLength + 1];
+        GetWindowText(controlHwnd, windowText, windowTextLength);
+        MetaString result = windowText;
+
+        delete [] windowText;
+
+        return result;
     }
 
     // application events
@@ -306,7 +355,7 @@ namespace GDIPPConfigurationEditor
         InitializeGUI();
         ApplyValuesToControls(values);
 
-        preview = new GDIPPPreview(hwnd, GetGDIPPDirectory());
+        preview = new GDIPPPreview(hwnd);
         preview->UpdateView();
     }
 
@@ -316,6 +365,18 @@ namespace GDIPPConfigurationEditor
         preview = NULL;
 
         PostQuitMessage(0);
+    }
+
+    void Application::OnPaint()
+    {
+        PAINTSTRUCT ps;
+        HDC dc;
+
+        dc = BeginPaint(hwnd, &ps);
+
+        preview->DrawWidgetToDC(dc);
+
+        EndPaint(hwnd, &ps);
     }
 
     // button click events

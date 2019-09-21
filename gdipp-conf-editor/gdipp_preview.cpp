@@ -22,9 +22,11 @@
 
 #include "gdipp_preview.h"
 
-GDIPPPreview::GDIPPPreview(HWND targetWindow, const MetaString & configurationDirectory)
+static const int CAPTURE_WIDTH = 530;
+static const int CAPTURE_HEIGHT = 500;
+
+GDIPPPreview::GDIPPPreview(HWND targetWindow)
     : targetWindow(targetWindow),
-      configurationDirectory(configurationDirectory),
       demoProcessCapture(NULL)
 {
 
@@ -41,25 +43,7 @@ GDIPPPreview::~GDIPPPreview()
 
 void GDIPPPreview::UpdateView()
 {
-    PROCESS_INFORMATION processInfo;
-
-    try
-    {
-        processInfo = StartGDIPPDemoProcess();
-
-        if (demoProcessCapture != NULL)
-        {
-            DeleteObject(demoProcessCapture);
-            demoProcessCapture = NULL;
-        }
-
-        demoProcessCapture = GrabGDIPPDemoWindow(processInfo);
-        EndGDIPPDemoProcess(processInfo);
-    }
-    catch (const std::exception & e)
-    {
-        EndGDIPPDemoProcess(processInfo);
-    }
+    // TODO
 }
 
 PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess()
@@ -71,16 +55,10 @@ PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess()
     memset(&startupInfo, 0, sizeof(STARTUPINFO));
     
     startupInfo.cb = sizeof(STARTUPINFO);
+    
+    MetaString demoImageName = TEXT("gdipp_demo_render.exe");
 
-#ifdef _WIN64
-    MetaString demoImageName = TEXT("gdipp_pre_64.exe");
-#else
-    MetaString demoImageName = TEXT("gdipp_pre_32.exe");
-#endif
-
-    MetaString processCompleteName = configurationDirectory + TEXT("\\") + demoImageName;
-
-    if (CreateProcess(processCompleteName.c_str(),
+    if (CreateProcess(demoImageName.c_str(),
                       NULL,
                       NULL,
                       NULL,
@@ -91,29 +69,23 @@ PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess()
                       &startupInfo,
                       &processInfo) != TRUE)
     {
-        throw std::runtime_error("Unable to start gdipp demo process.");
+        throw std::runtime_error("Unable to start gdipp_demo_render.exe process.");
     }
 
     return processInfo;
 }
 
-HBITMAP GDIPPPreview::GrabGDIPPDemoWindow(const PROCESS_INFORMATION & demoProcess)
+void GDIPPPreview::DrawWidgetToDC(HDC dc)
 {
-    HBITMAP capture = NULL;
-
-    return capture;
-}
-
-void GDIPPPreview::EndGDIPPDemoProcess(PROCESS_INFORMATION & demoProcess)
-{
-    if (demoProcess.hProcess != NULL)
+    if (demoProcessCapture == NULL)
     {
-        TerminateProcess(demoProcess.hProcess, 0);
-        WaitForSingleObject(demoProcess.hProcess, 5000);
-
-        CloseHandle(demoProcess.hThread);
-        CloseHandle(demoProcess.hProcess);
+        // nothing to draw
+        return;
     }
 
-    memset(&demoProcess, 0, sizeof(PROCESS_INFORMATION));
+    HDC memDC = CreateCompatibleDC(dc);
+    HGDIOBJ oldObject = SelectObject(memDC, demoProcessCapture);
+    BitBlt(dc, 860, 50, CAPTURE_WIDTH, CAPTURE_HEIGHT, memDC , 0, 0, SRCCOPY);
+    SelectObject(memDC, oldObject);
+    DeleteDC(memDC);
 }

@@ -48,7 +48,7 @@ namespace GDIPPConfiguration
             throw std::runtime_error("Unable to parse GDIPP configuration XML file.");
         }
 
-        pugi::xml_node gdippNode = doc.child("gdipp");
+        pugi::xml_node gdippNode = doc.root().child("gdipp");
 
         if (gdippNode.empty() == false)
         {

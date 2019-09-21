@@ -29,16 +29,14 @@
 class GDIPPPreview
 {
 public:
-    GDIPPPreview(HWND targetWindow, const MetaString & configurationDirectory);
+    GDIPPPreview(HWND targetWindow);
     ~GDIPPPreview();
     void UpdateView();
+    void DrawWidgetToDC(HDC dc);
 
 private:
     HWND targetWindow;
-    MetaString configurationDirectory;
     HBITMAP demoProcessCapture;
 
     PROCESS_INFORMATION StartGDIPPDemoProcess();
-    HBITMAP GrabGDIPPDemoWindow(const PROCESS_INFORMATION & demoProcess);
-    void EndGDIPPDemoProcess(PROCESS_INFORMATION & demoProcess);
 };
