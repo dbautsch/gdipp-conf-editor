@@ -26,17 +26,36 @@
 #include <iostream>
 
 #include "demo_render.h"
+#include "commandline.h"
 
-INT APIENTRY WinMain(HINSTANCE hinstance,
-                     HINSTANCE thisInstance,
-                     LPSTR cmdLine,
+#include "../gdipp-conf-editor/local_types.h"
+
+#if defined(UNICODE) || defined(_UNICODE)
+INT APIENTRY wWinMain(HINSTANCE thisInstance,
+                     HINSTANCE prevInstance,
+                     wchar_t * cmdLine,
                      int showCmd)
+#else
+INT APIENTRY WinMain(HINSTANCE thisInstance,
+                     HINSTANCE prevInstance,
+                     char * cmdLine,
+                     int showCmd)
+#endif
 {
     DemoRender * demoRender = NULL;
 
     try
     {
-        demoRender = new DemoRender();
+        CommandLine commandLine;
+        MetaString outputFileName = commandLine.Get(TEXT("output"));
+
+        if (outputFileName.empty())
+        {
+            throw std::runtime_error("Unable to start. Missing `output` parameter.");
+        }
+
+        demoRender = new DemoRender(outputFileName);
+        demoRender->RenderToFile(TEXT("Ala ma kota"));
         delete demoRender;
     }
     catch (const std::exception & e)
@@ -47,6 +66,8 @@ INT APIENTRY WinMain(HINSTANCE hinstance,
         {
             delete demoRender;
         }
+
+        return -1;
     }
 
     return 0;

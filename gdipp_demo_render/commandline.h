@@ -22,20 +22,26 @@
 
 #pragma once
 
+#include <map>
+
 #include "../gdipp-conf-editor/local_types.h"
 
 #include <windows.h>
 
-class DemoRender
+class CommandLine
 {
 public:
-    DemoRender(const MetaString & outputFileName);
-    ~DemoRender();
-    void RenderToFile(const MetaString & text);
+    typedef std::map<MetaString, MetaString> CommandEntities;
+
+    CommandLine();
+
+    void ParseCommands();
+    MetaString Get(const MetaString & name) const;
 
 private:
-    MetaString outputFileName;
-    ULONG_PTR gdiplusToken;
+    CommandEntities commands;
 
-    bool GetEncoderClsid(const MetaString & format, CLSID * clsid) const;
+    
+    std::pair<MetaString, MetaString> SplitArgument(LPWSTR argument) const;
+    MetaString Unquote(const MetaString & text) const;
 };

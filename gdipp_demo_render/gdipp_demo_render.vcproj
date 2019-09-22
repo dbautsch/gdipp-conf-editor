@@ -60,6 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="gdiplus.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -133,6 +134,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="gdiplus.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -175,11 +177,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\commandline.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\demo_render.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\gdipp-conf-editor\util.cpp"
 				>
 			</File>
 		</Filter>
@@ -189,7 +199,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\commandline.h"
+				>
+			</File>
+			<File
 				RelativePath=".\demo_render.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gdipp-conf-editor\local_types.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gdipp-conf-editor\util.h"
 				>
 			</File>
 		</Filter>
