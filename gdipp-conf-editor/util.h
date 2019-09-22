@@ -14,4 +14,16 @@ namespace Util
         return (value >= static_cast<T>(min) &&
                 value <= static_cast<T>(max));
     }
+
+    extern std::string UnicodeToAnsi(const std::wstring & input);
+
+    extern std::wstring AnsiToUnicode(const std::string & input);
+   
+    extern MetaString CreateMetaString(const std::string & input);
+
+    extern MetaString CreateMetaString(const std::wstring & input);
+
+    extern std::string MetaStringToAnsi(const MetaString & input);
+
+    extern std::wstring MetaStringToUnicode(const MetaString & input);
 }

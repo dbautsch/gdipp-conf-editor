@@ -41,7 +41,7 @@ namespace GDIPPConfigurationEditor
     {
     public:
         Application(HINSTANCE hinstance,
-                    LPSTR cmdLine,
+                    TCHAR * cmdLine,
                     int showCmd);
 
         int Run();

@@ -29,7 +29,7 @@
 
 namespace GDIPPConfiguration
 {
-    Writer::Writer(const std::string & fileName)
+    Writer::Writer(const MetaString & fileName)
         : fileName(fileName)
     {
 
@@ -57,7 +57,8 @@ namespace GDIPPConfiguration
 
                 if (lcdFilterNode.empty() == false)
                 {
-                    lcdFilterNode.first_child().set_value(Util::IntToStr(values.lcdFilter()).c_str());
+                    lcdFilterNode.first_child().set_value(Util::MetaStringToAnsi(
+                        Util::IntToStr(values.lcdFilter())).c_str());
                 }
             }
 
@@ -77,17 +78,20 @@ namespace GDIPPConfiguration
 
                 if (autoHintingNode.empty() == false)
                 {
-                    autoHintingNode.first_child().set_value(Util::IntToStr(values.autoHintingMode()).c_str());
+                    autoHintingNode.first_child().set_value(Util::MetaStringToAnsi(
+                        Util::IntToStr(values.autoHintingMode())).c_str());
                 }
 
                 if (embeddedBitmapNode.empty() == false)
                 {
-                    embeddedBitmapNode.first_child().set_value(Util::IntToStr(values.embeddedBitmap).c_str());
+                    embeddedBitmapNode.first_child().set_value(Util::MetaStringToAnsi(
+                        Util::IntToStr(values.embeddedBitmap)).c_str());
                 }
 
                 if (emboldenNode.empty() == false)
                 {
-                    emboldenNode.first_child().set_value(Util::IntToStr(values.embolden).c_str());
+                    emboldenNode.first_child().set_value(Util::MetaStringToAnsi(
+                        Util::IntToStr(values.embolden)).c_str());
                 }
 
                 if (gammaNode.empty() == false)
@@ -99,28 +103,33 @@ namespace GDIPPConfiguration
 
                     if (!gammaRNode.empty())
                     {
-                        gammaRNode.first_child().set_value(values.gamma.GetR().c_str());
+                        gammaRNode.first_child().set_value(Util::MetaStringToAnsi(
+                            values.gamma.GetR()).c_str());
                     }
 
                     if (!gammaGNode.empty())
                     {
-                        gammaGNode.first_child().set_value(values.gamma.GetG().c_str());
+                        gammaGNode.first_child().set_value(Util::MetaStringToAnsi(
+                            values.gamma.GetG()).c_str());
                     }
 
                     if (!gammaBNode.empty())
                     {
-                        gammaBNode.first_child().set_value(values.gamma.GetB().c_str());
+                        gammaBNode.first_child().set_value(Util::MetaStringToAnsi(
+                            values.gamma.GetB()).c_str());
                     }
                 }
 
                 if (hintingNode.empty() == false)
                 {
-                    hintingNode.first_child().set_value(Util::IntToStr(values.hinting).c_str());
+                    hintingNode.first_child().set_value(Util::MetaStringToAnsi(
+                        Util::IntToStr(values.hinting)).c_str());
                 }
 
                 if (kerningNode.empty() == false)
                 {
-                    kerningNode.first_child().set_value(Util::IntToStr(values.kerning).c_str());
+                    kerningNode.first_child().set_value(Util::MetaStringToAnsi(
+                        Util::IntToStr(values.kerning)).c_str());
                 }
 
                 if (renderModeNode.empty() == false)
@@ -133,33 +142,39 @@ namespace GDIPPConfiguration
 
                     if (!monoNode.empty())
                     {
-                        monoNode.first_child().set_value(Util::IntToStr(values.renderMode.GetMonoMode()).c_str());
+                        monoNode.first_child().set_value(Util::MetaStringToAnsi(
+                            Util::IntToStr(values.renderMode.GetMonoMode())).c_str());
                     }
 
                     if (!grayNode.empty())
                     {
-                        grayNode.first_child().set_value(Util::IntToStr(values.renderMode.GetGrayMode()).c_str());
+                        grayNode.first_child().set_value(Util::MetaStringToAnsi(
+                            Util::IntToStr(values.renderMode.GetGrayMode())).c_str());
                     }
 
                     if (!subpixelNode.empty())
                     {
-                        subpixelNode.first_child().set_value(Util::IntToStr(values.renderMode.GetSubpixelMode()).c_str());
+                        subpixelNode.first_child().set_value(Util::MetaStringToAnsi(
+                            Util::IntToStr(values.renderMode.GetSubpixelMode())).c_str());
                     }
 
                     if (!pixelGeometryNode.empty())
                     {
-                        pixelGeometryNode.first_child().set_value(Util::IntToStr(values.pixelGeometry()).c_str());
+                        pixelGeometryNode.first_child().set_value(Util::MetaStringToAnsi(
+                            Util::IntToStr(values.pixelGeometry())).c_str());
                     }
 
                     if (!aliasedTextNode.empty())
                     {
-                        aliasedTextNode.first_child().set_value(Util::IntToStr(values.aliasedText).c_str());
+                        aliasedTextNode.first_child().set_value(Util::MetaStringToAnsi(
+                            Util::IntToStr(values.aliasedText)).c_str());
                     }
                 }
 
                 if (rendererNode.empty() == false)
                 {
-                    rendererNode.first_child().set_value(Util::IntToStr(values.renderer).c_str());
+                    rendererNode.first_child().set_value(Util::MetaStringToAnsi(
+                        Util::IntToStr(values.renderer)).c_str());
                 }
 
                 if (shadowNode.empty() == false)
@@ -170,17 +185,20 @@ namespace GDIPPConfiguration
 
                     if (!offsetXNode.empty())
                     {
-                        offsetXNode.first_child().set_value(Util::IntToStr(values.shadow.GetOffsetX()).c_str());
+                        offsetXNode.first_child().set_value(Util::MetaStringToAnsi(
+                            Util::IntToStr(values.shadow.GetOffsetX())).c_str());
                     }
 
                     if (!offsetYNode.empty())
                     {
-                        offsetYNode.first_child().set_value(Util::IntToStr(values.shadow.GetOffsetY()).c_str());
+                        offsetYNode.first_child().set_value(Util::MetaStringToAnsi(
+                            Util::IntToStr(values.shadow.GetOffsetY())).c_str());
                     }
 
                     if (!alphaNode.empty())
                     {
-                        alphaNode.first_child().set_value(Util::IntToStr(values.shadow.GetAlpha()).c_str());
+                        alphaNode.first_child().set_value(Util::MetaStringToAnsi(
+                            Util::IntToStr(values.shadow.GetAlpha())).c_str());
                     }
                 }
             }

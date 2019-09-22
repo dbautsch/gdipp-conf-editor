@@ -25,10 +25,17 @@
 
 #include "application.h"
 
+#if defined(UNICODE) || defined(_UNICODE)
+INT APIENTRY wWinMain(HINSTANCE thisInstance,
+                     HINSTANCE prevInstance,
+                     wchar_t * cmdLine,
+                     int showCmd)
+#else
 INT APIENTRY WinMain(HINSTANCE thisInstance,
                      HINSTANCE prevInstance,
-                     LPSTR cmdLine,
+                     char * cmdLine,
                      int showCmd)
+#endif
 {
     int retCode = -1;
 
@@ -41,7 +48,11 @@ INT APIENTRY WinMain(HINSTANCE thisInstance,
     }
     catch (const std::exception & e)
     {
-        MessageBox(0, e.what(), TEXT("GDIPP Configuration editor: An error occurred"), MB_ICONERROR);
+        MessageBox(0,
+            Util::CreateMetaString(e.what()).c_str(),
+            TEXT("GDIPP Configuration editor: An error occurred"),
+            MB_ICONERROR);
+
         return -1;
     }
     catch (...)

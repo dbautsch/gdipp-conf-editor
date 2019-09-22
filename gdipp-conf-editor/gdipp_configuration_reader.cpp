@@ -60,7 +60,7 @@ namespace GDIPPConfiguration
 
                 if (lcdFilterNode.empty() == false)
                 {
-                    values.lcdFilter = std::string(lcdFilterNode.first_child().value());
+                    values.lcdFilter = Util::CreateMetaString(lcdFilterNode.first_child().value());
                 }
             }
 
@@ -80,18 +80,20 @@ namespace GDIPPConfiguration
 
                 if (autoHintingNode.empty() == false)
                 {
-                    values.autoHintingMode = std::string(autoHintingNode.first_child().value());
+                    values.autoHintingMode = Util::CreateMetaString(autoHintingNode.first_child().value());
                 }
 
                 if (embeddedBitmapNode.empty() == false)
                 {
                     values.embeddedBitmap = 
-                        Util::TryIntFromStr(embeddedBitmapNode.first_child().value(), INT_MIN);
+                        Util::TryIntFromStr(Util::CreateMetaString(
+                        embeddedBitmapNode.first_child().value()), INT_MIN);
                 }
 
                 if (emboldenNode.empty() == false)
                 {
-                    values.embolden = Util::TryIntFromStr(emboldenNode.first_child().value(), INT_MIN);
+                    values.embolden = Util::TryIntFromStr(Util::CreateMetaString(
+                        emboldenNode.first_child().value()), INT_MIN);
                 }
 
                 if (gammaNode.empty() == false)
@@ -103,17 +105,17 @@ namespace GDIPPConfiguration
 
                     if (!gammaRNode.empty())
                     {
-                        r = gammaRNode.first_child().value();
+                        r = Util::CreateMetaString(gammaRNode.first_child().value());
                     }
 
                     if (!gammaGNode.empty())
                     {
-                        g = gammaGNode.first_child().value();
+                        g = Util::CreateMetaString(gammaGNode.first_child().value());
                     }
 
                     if (!gammaBNode.empty())
                     {
-                        b = gammaBNode.first_child().value();
+                        b = Util::CreateMetaString(gammaBNode.first_child().value());
                     }
 
                     values.gamma = GDIPPConfiguration::Values::Gamma(r, g, b);
@@ -121,12 +123,14 @@ namespace GDIPPConfiguration
 
                 if (hintingNode.empty() == false)
                 {
-                    values.hinting = Util::TryIntFromStr(hintingNode.first_child().value(), INT_MIN);
+                    values.hinting = Util::TryIntFromStr(Util::CreateMetaString(
+                        hintingNode.first_child().value()), INT_MIN);
                 }
 
                 if (kerningNode.empty() == false)
                 {
-                    values.kerning = Util::TryIntFromStr(kerningNode.first_child().value(), INT_MIN);
+                    values.kerning = Util::TryIntFromStr(Util::CreateMetaString(
+                        kerningNode.first_child().value()), INT_MIN);
                 }
 
                 if (renderModeNode.empty() == false)
@@ -141,17 +145,17 @@ namespace GDIPPConfiguration
 
                     if (!monoNode.empty())
                     {
-                        mono = monoNode.first_child().value();
+                        mono = Util::CreateMetaString(monoNode.first_child().value());
                     }
 
                     if (!grayNode.empty())
                     {
-                        gray = grayNode.first_child().value();
+                        gray = Util::CreateMetaString(grayNode.first_child().value());
                     }
 
                     if (!subpixelNode.empty())
                     {
-                        subpixel = subpixelNode.first_child().value();
+                        subpixel = Util::CreateMetaString(subpixelNode.first_child().value());
                     }
 
                     values.renderMode = GDIPPConfiguration::Values::RenderMode(mono, gray, subpixel);
@@ -159,20 +163,22 @@ namespace GDIPPConfiguration
                     if (!pixelGeometryNode.empty())
                     {
                         values.pixelGeometry 
-                            = GDIPPConfiguration::Values::PixelGeometry(
-                            pixelGeometryNode.first_child().value());
+                            = GDIPPConfiguration::Values::PixelGeometry(Util::CreateMetaString(
+                            pixelGeometryNode.first_child().value()));
                     }
 
                     if (!aliasedTextNode.empty())
                     {
                         values.aliasedText = 
-                            Util::TryIntFromStr(aliasedTextNode.first_child().value(), INT_MIN);
+                            Util::TryIntFromStr(Util::CreateMetaString(
+                            aliasedTextNode.first_child().value()), INT_MIN);
                     }
                 }
 
                 if (rendererNode.empty() == false)
                 {
-                    values.renderer = Util::TryIntFromStr(rendererNode.first_child().value(), INT_MIN);
+                    values.renderer = Util::TryIntFromStr(Util::CreateMetaString(
+                        rendererNode.first_child().value()), INT_MIN);
                 }
 
                 if (shadowNode.empty() == false)
@@ -185,17 +191,20 @@ namespace GDIPPConfiguration
 
                     if (!offsetXNode.empty())
                     {
-                        offsetX = Util::TryIntFromStr(offsetXNode.first_child().value(), INT_MIN);
+                        offsetX = Util::TryIntFromStr(Util::CreateMetaString(
+                            offsetXNode.first_child().value()), INT_MIN);
                     }
 
                     if (!offsetYNode.empty())
                     {
-                        offsetY = Util::TryIntFromStr(offsetYNode.first_child().value(), INT_MIN);
+                        offsetY = Util::TryIntFromStr(Util::CreateMetaString(
+                            offsetYNode.first_child().value()), INT_MIN);
                     }
 
                     if (!alphaNode.empty())
                     {
-                        alpha = Util::TryIntFromStr(alphaNode.first_child().value(), INT_MIN);
+                        alpha = Util::TryIntFromStr(Util::CreateMetaString(
+                            alphaNode.first_child().value()), INT_MIN);
                     }
 
                     values.shadow = GDIPPConfiguration::Values::Shadow(offsetX, offsetY, alpha);

@@ -42,79 +42,79 @@ namespace GDIPPConfiguration
 
         if (autoHintingMode == AutoHintingMode::NotSet)
         {
-            validationResult.AppendIncorrectValue("auto_hinting");
+            validationResult.AppendIncorrectValue(TEXT("auto_hinting"));
         }
 
         if (embolden < -1000 || embolden > 1000)
         {
-            validationResult.AppendIncorrectValue("embolden");
+            validationResult.AppendIncorrectValue(TEXT("embolden"));
         }
 
         if (lcdFilter == LCDFilter::NotSet)
         {
-            validationResult.AppendIncorrectValue("lcd_filter");
+            validationResult.AppendIncorrectValue(TEXT("lcd_filter"));
         }
 
         if (gamma.GetR().empty())
         {
-            validationResult.AppendIncorrectValue("gamma.red");
+            validationResult.AppendIncorrectValue(TEXT("gamma.red"));
         }
 
         if (gamma.GetG().empty())
         {
-            validationResult.AppendIncorrectValue("gamma.green");
+            validationResult.AppendIncorrectValue(TEXT("gamma.green"));
         }
 
         if (gamma.GetB().empty())
         {
-            validationResult.AppendIncorrectValue("gamma.blue");
+            validationResult.AppendIncorrectValue(TEXT("gamma.blue"));
         }
 
         if (hinting < 0 || hinting > 3)
         {
-            validationResult.AppendIncorrectValue("hinting");
+            validationResult.AppendIncorrectValue(TEXT("hinting"));
         }
 
         if (kerning < 0 || kerning > 1)
         {
-            validationResult.AppendIncorrectValue("kerning");
+            validationResult.AppendIncorrectValue(TEXT("kerning"));
         }
 
         if (renderMode.GetGrayMode() == RenderMode::NotSet ||
             renderMode.GetMonoMode() == RenderMode::NotSet ||
             renderMode.GetSubpixelMode() == RenderMode::NotSet)
         {
-            validationResult.AppendIncorrectValue("render_mode");
+            validationResult.AppendIncorrectValue(TEXT("render_mode"));
         }
 
         if (renderer == INT_MIN)
         {
-            validationResult.AppendIncorrectValue("renderer");
+            validationResult.AppendIncorrectValue(TEXT("renderer"));
         }
 
         if (pixelGeometry == PixelGeometry::NotSet)
         {
-            validationResult.AppendIncorrectValue("pixel_geometry");
+            validationResult.AppendIncorrectValue(TEXT("pixel_geometry"));
         }
 
         if (shadow.GetOffsetX() == INT_MIN)
         {
-            validationResult.AppendIncorrectValue("shadow.offset_x");
+            validationResult.AppendIncorrectValue(TEXT("shadow.offset_x"));
         }
 
         if (shadow.GetOffsetY() == INT_MIN)
         {
-            validationResult.AppendIncorrectValue("shadow.offset_y");
+            validationResult.AppendIncorrectValue(TEXT("shadow.offset_y"));
         }
 
         if (shadow.GetAlpha() == INT_MIN)
         {
-            validationResult.AppendIncorrectValue("shadow.alpha");
+            validationResult.AppendIncorrectValue(TEXT("shadow.alpha"));
         }
 
         if (aliasedText == INT_MIN)
         {
-            validationResult.AppendIncorrectValue("aliased_text");
+            validationResult.AppendIncorrectValue(TEXT("aliased_text"));
         }
         
         return validationResult;

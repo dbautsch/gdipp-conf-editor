@@ -23,9 +23,12 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 
 #if defined(UNICODE) || defined(_UNICODE)
     typedef std::wstring MetaString;
+    typedef std::wstringstream MetaStream;
 #else
     typedef std::string MetaString;
+    typedef std::stringstream MetaStream;
 #endif

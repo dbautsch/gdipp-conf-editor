@@ -38,7 +38,7 @@
 namespace GDIPPConfigurationEditor
 {
     Application::Application(HINSTANCE hinstance,
-                             LPSTR cmdLine,
+                             TCHAR * cmdLine,
                              int showCmd)
         :
             thisInstance(hinstance),
@@ -160,9 +160,9 @@ namespace GDIPPConfigurationEditor
         return FALSE;
     }
 
-    std::string Application::GetGDIPPDirectory() const
+    MetaString Application::GetGDIPPDirectory() const
     {
-        return std::string("C:\\Program Files (x86)\\gdipp");
+        return MetaString(TEXT("C:\\Program Files (x86)\\gdipp"));
     }
 
     GDIPPConfiguration::Values Application::GetValuesFromControls() const
@@ -330,14 +330,14 @@ namespace GDIPPConfigurationEditor
         // This method may terminate the whole application. Exceptions are catched in the main()
         // function by design.
 
-        const std::string configurationDirectory = GetGDIPPDirectory();
+        const MetaString configurationDirectory = GetGDIPPDirectory();
 
         if (configurationDirectory.empty())
         {
             throw std::runtime_error("GDIPP is not installed. Please install GDIPP.");
         }
 
-        GDIPPConfiguration::Reader reader(configurationDirectory + "\\gdipp_setting.xml");
+        GDIPPConfiguration::Reader reader(configurationDirectory + TEXT("\\gdipp_setting.xml"));
         values = reader.GetValues();
 
         GDIPPConfiguration::Values::ValidationResult validationResult = values.Validate();
@@ -346,7 +346,7 @@ namespace GDIPPConfigurationEditor
         {
             // XML configuration is incorrect or missing some values.
             MetaString textReport = validationResult.GetTextReport();
-            throw std::runtime_error(textReport);
+            throw std::runtime_error(Util::MetaStringToAnsi(textReport));
         }
     }
 
@@ -382,7 +382,7 @@ namespace GDIPPConfigurationEditor
     // button click events
     void Application::OnClickSaveConfiguration()
     {
-        const std::string configurationDirectory = GetGDIPPDirectory();
+        const MetaString configurationDirectory = GetGDIPPDirectory();
 
         if (configurationDirectory.empty())
         {
@@ -396,13 +396,13 @@ namespace GDIPPConfigurationEditor
         try
         {
             GDIPPConfiguration::Values values = GetValuesFromControls();
-            GDIPPConfiguration::Writer writer(configurationDirectory + "\\gdipp_setting.xml");
+            GDIPPConfiguration::Writer writer(configurationDirectory + TEXT("\\gdipp_setting.xml"));
             writer.Save(values);
         }
         catch (const std::exception & e)
         {
             MessageBox(hwnd,
-                       e.what(),
+                Util::CreateMetaString(e.what()).c_str(),
                        TEXT("Unable to save configuration."),
                        MB_ICONERROR);
         }

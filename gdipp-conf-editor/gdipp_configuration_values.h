@@ -26,6 +26,8 @@
 #include <vector>
 #include <sstream>
 
+#include <windows.h>
+
 #include "util.h"
 
 namespace GDIPPConfiguration
@@ -66,20 +68,20 @@ namespace GDIPPConfiguration
 
             MetaString GetTextReport() const
             {
-                std::stringstream stream;
+                MetaStream stream;
 
-                stream << "Configuration XML file is missing following values:" << std::endl;
+                stream << TEXT("Configuration XML file is missing following values:") << std::endl;
 
                 if (GetStatus())
                 {
-                    stream << "No missing values.";
+                    stream << TEXT("No missing values.");
                 }
                 else
                 {
                     for (std::vector<MetaString>::const_iterator it = incorrectValues.begin();
                          it != incorrectValues.end(); ++it)
                     {
-                        stream << "* " << * it << std::endl;
+                        stream << TEXT("* ") << * it << std::endl;
                     }
                 }
 
@@ -102,7 +104,7 @@ namespace GDIPPConfiguration
 
             AutoHintingMode(const MetaString & textValue)
             {
-                std::stringstream str(textValue);
+                MetaStream str(textValue);
                 int number;
                 str >> number;
 
@@ -151,7 +153,7 @@ namespace GDIPPConfiguration
 
             LCDFilter(const MetaString & textValue)
             {
-                std::stringstream str(textValue);
+                MetaStream str(textValue);
                 int number;
                 str >> number;
 
@@ -261,7 +263,7 @@ namespace GDIPPConfiguration
         public:
             Gamma()
             {
-                r = g = b = MetaString("");
+                r = g = b = MetaString(TEXT(""));
             }
 
             Gamma(const MetaString & r,
@@ -302,7 +304,7 @@ namespace GDIPPConfiguration
 
             PixelGeometry(const MetaString & textValue)
             {
-                std::stringstream str(textValue);
+                MetaStream str(textValue);
                 int number;
                 str >> number;
 
