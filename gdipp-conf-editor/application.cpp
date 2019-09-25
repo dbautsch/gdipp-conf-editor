@@ -31,6 +31,7 @@
 
 #include <commctrl.h>
 #include <windowsx.h>
+#include <shlwapi.h>
 
 #pragma comment(lib, "Comctl32.lib")
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' ""version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -60,8 +61,7 @@ namespace GDIPPConfigurationEditor
 
         if (InitCommonControlsEx(&comctlInfo) != TRUE)
         {
-            DWORD e = GetLastError();
-            return -1;
+            throw std::runtime_error("Unable to initialize Microsoft Common Controls library.");
         }
 
         hwnd = CreateDialogParam(thisInstance,
@@ -120,11 +120,6 @@ namespace GDIPPConfigurationEditor
                         app->OnClickSaveConfiguration();
                         break;
                     }
-                case IDC_UPDATE_PREVIEW:
-                    {
-                        app->OnClickUpdatePreview();
-                        break;
-                    }
 
                 case IDC_ABOUT:
                     {
@@ -162,12 +157,54 @@ namespace GDIPPConfigurationEditor
 
     MetaString Application::GetGDIPPDirectory() const
     {
-        return MetaString(TEXT("C:\\Program Files (x86)\\gdipp"));
+        const TCHAR * programFiles86 = TEXT("C:\\Program Files (x86)\\gdipp");
+        const TCHAR * programFiles = TEXT("C:\\Program Files\\gdipp");
+      
+        if (PathFileExists(programFiles86))
+        {
+            return programFiles86;
+        }
+
+        return programFiles;
     }
 
     GDIPPConfiguration::Values Application::GetValuesFromControls() const
     {
         GDIPPConfiguration::Values values;
+
+        values.autoHintingMode = Util::IntToStr(ComboBoxById_GetCurSel(IDC_AUTOHINTING));
+        values.embeddedBitmap = ComboBoxById_GetCurSel(IDC_EMBEDDED_BITMAP);
+        values.embolden = Util::TryIntFromStr(EditById_GetText(IDC_EMBOLDEN), INT_MIN);
+        values.lcdFilter = Util::IntToStr(ComboBoxById_GetCurSel(IDC_LCDFILTER));
+
+        MetaString gammaR = EditById_GetText(IDC_GAMMA_R);
+        MetaString gammaG = EditById_GetText(IDC_GAMMA_G);
+        MetaString gammaB = EditById_GetText(IDC_GAMMA_B);
+
+        values.gamma = GDIPPConfiguration::Values::Gamma(gammaR, gammaG, gammaB);
+
+        values.hinting = ComboBoxById_GetCurSel(IDC_HINTING);
+        values.kerning = ComboBoxById_GetCurSel(IDC_KERNING);
+        values.pixelGeometry = Util::IntToStr(ComboBoxById_GetCurSel(IDC_PIXELGEOMETRY));
+        values.renderer = Util::TryIntFromStr(EditById_GetText(IDC_RENDERER), INT_MIN);
+        
+        MetaString shadowX = EditById_GetText(IDC_SHADOWOFFSET_X);
+        MetaString shadowY = EditById_GetText(IDC_SHADOWOFFSET_Y);
+        MetaString shadowAlpha = EditById_GetText(IDC_SHADOWALPHA);
+
+        values.shadow = GDIPPConfiguration::Values::Shadow(Util::TryIntFromStr(shadowX, INT_MIN),
+            Util::TryIntFromStr(shadowY, INT_MIN),
+            Util::TryIntFromStr(shadowAlpha, INT_MIN));
+
+        values.aliasedText = ComboBoxById_GetCurSel(IDC_ALIASEDTEXT);
+        
+        int monoRenderMode = ComboBoxById_GetCurSel(IDC_RENDERMODE_MONO);
+        int grayRenderMode = ComboBoxById_GetCurSel(IDC_RENDERMODE_GRAYSCALE);
+        int subpixelRenderMode = ComboBoxById_GetCurSel(IDC_RENDERMODE_SUBPIXEL);
+
+        values.renderMode = GDIPPConfiguration::Values::RenderMode(Util::IntToStr(monoRenderMode),
+            Util::IntToStr(grayRenderMode),
+            Util::IntToStr(subpixelRenderMode));
 
         return values;
     }
@@ -316,7 +353,7 @@ namespace GDIPPConfigurationEditor
         }
 
         windowText = new TCHAR[windowTextLength + 1];
-        GetWindowText(controlHwnd, windowText, windowTextLength);
+        GetWindowText(controlHwnd, windowText, windowTextLength + 1);
         MetaString result = windowText;
 
         delete [] windowText;
@@ -396,8 +433,23 @@ namespace GDIPPConfigurationEditor
         try
         {
             GDIPPConfiguration::Values values = GetValuesFromControls();
-            GDIPPConfiguration::Writer writer(configurationDirectory + TEXT("\\gdipp_setting.xml"));
-            writer.Save(values);
+
+            GDIPPConfiguration::Values::ValidationResult validationResult = values.Validate();
+
+            if (validationResult.GetStatus() == false)
+            {
+                MessageBox(hwnd,
+                    validationResult.GetTextReport().c_str(),
+                    TEXT("Invalid data."),
+                    MB_ICONERROR);
+                return;
+            }
+            else
+            {
+                GDIPPConfiguration::Writer writer(configurationDirectory + TEXT("\\gdipp_setting.xml"));
+                writer.Save(values);
+                preview->UpdateView();
+            }
         }
         catch (const std::exception & e)
         {
@@ -406,11 +458,6 @@ namespace GDIPPConfigurationEditor
                        TEXT("Unable to save configuration."),
                        MB_ICONERROR);
         }
-    }
-
-    void Application::OnClickUpdatePreview()
-    {
-        preview->UpdateView();
     }
 
     void Application::OnClickAbout()

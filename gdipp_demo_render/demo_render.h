@@ -35,7 +35,13 @@ public:
 
 private:
     MetaString outputFileName;
+    MetaString textToRender;
     ULONG_PTR gdiplusToken;
+    HBITMAP capturedBitmap;
+    bool stopMessageLoop;
+
+    static INT_PTR CALLBACK MainDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
     bool GetEncoderClsid(const MetaString & format, CLSID * clsid) const;
+    bool CaptureWindowContents(HWND hwnd);
 };

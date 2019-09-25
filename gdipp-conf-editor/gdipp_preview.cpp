@@ -22,31 +22,97 @@
 
 #include "gdipp_preview.h"
 
-static const int CAPTURE_WIDTH = 530;
-static const int CAPTURE_HEIGHT = 500;
+#include <tchar.h>
+
+#include <iostream>
+
+#include "util.h"
 
 GDIPPPreview::GDIPPPreview(HWND targetWindow)
     : targetWindow(targetWindow),
-      demoProcessCapture(NULL)
+      fontPreviewImage(NULL),
+      gdiplusToken(NULL)
 {
+    using namespace Gdiplus;
 
+    GdiplusStartupInput gdiplusStartupInput;
+    
+
+    Status gdiplusStatus =
+        GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+    if (gdiplusStatus != Ok)
+    {
+        MetaString message = TEXT("GdiplusStartup has failed. Status code: ");
+        message += Util::IntToStr(static_cast<int>(gdiplusStatus));
+
+        throw std::runtime_error(Util::MetaStringToAnsi(message));
+    }
 }
 
 GDIPPPreview::~GDIPPPreview()
 {
-    if (demoProcessCapture)
+    using namespace Gdiplus;
+
+    if (fontPreviewImage)
     {
-        DeleteObject(demoProcessCapture);
-        demoProcessCapture = NULL;
+        delete fontPreviewImage;
+        fontPreviewImage = NULL;
+    }
+
+    if (gdiplusToken)
+    {
+        GdiplusShutdown(gdiplusToken);
+        gdiplusToken = NULL;
     }
 }
 
 void GDIPPPreview::UpdateView()
 {
-    // TODO
+    using namespace Gdiplus;
+
+    PROCESS_INFORMATION demoProcess;
+    MetaString bitmapFileName;
+
+    try
+    {
+        bitmapFileName = GenerateTemporaryFileName();
+        demoProcess = StartGDIPPDemoProcess(bitmapFileName);
+        WaitForSingleObject(demoProcess.hProcess, INFINITE);
+
+        CloseHandle(demoProcess.hThread);
+        CloseHandle(demoProcess.hProcess);
+
+        if (fontPreviewImage)
+        {
+            delete fontPreviewImage;
+            fontPreviewImage = NULL;
+        }
+
+        fontPreviewImage = Image::FromFile(bitmapFileName.c_str());
+        DeleteFile(bitmapFileName.c_str());
+        RedrawWindow(targetWindow, NULL, NULL, RDW_ERASE | RDW_INVALIDATE );
+    }
+    catch (const std::exception & e)
+    {
+        if (demoProcess.hThread)
+        {
+            CloseHandle(demoProcess.hThread);
+        }
+
+        if (demoProcess.hProcess)
+        {
+            CloseHandle(demoProcess.hProcess);
+        }
+
+        DeleteFile(bitmapFileName.c_str());
+        std::cerr << e.what() << std::endl;
+
+        throw std::runtime_error("Unable to generate preview.");
+    }
 }
 
-PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess()
+PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess(const MetaString & bitmapFileName)
 {
     PROCESS_INFORMATION processInfo;
     STARTUPINFO startupInfo;
@@ -56,10 +122,17 @@ PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess()
     
     startupInfo.cb = sizeof(STARTUPINFO);
     
-    MetaString demoImageName = TEXT("gdipp_demo_render.exe");
+    MetaString demoImageName = TEXT("C:\\SOURCE\\gdipp-conf-editor\\debug\\gdipp_demo_render.exe");
+
+    MetaString commandLineStr = TEXT("output=\"");
+    commandLineStr += bitmapFileName;
+    commandLineStr += TEXT("\"");
+
+    TCHAR * commandLine = new TCHAR[commandLineStr.length() + 1];
+    _tcscpy(commandLine, commandLineStr.c_str());
 
     if (CreateProcess(demoImageName.c_str(),
-                      NULL,
+                      commandLine,
                       NULL,
                       NULL,
                       FALSE,
@@ -69,23 +142,50 @@ PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess()
                       &startupInfo,
                       &processInfo) != TRUE)
     {
+        delete [] commandLine;
         throw std::runtime_error("Unable to start gdipp_demo_render.exe process.");
     }
+
+    delete [] commandLine;
 
     return processInfo;
 }
 
 void GDIPPPreview::DrawWidgetToDC(HDC dc)
 {
-    if (demoProcessCapture == NULL)
+    using namespace Gdiplus;
+
+    if (fontPreviewImage == NULL)
     {
         // nothing to draw
         return;
     }
 
-    HDC memDC = CreateCompatibleDC(dc);
-    HGDIOBJ oldObject = SelectObject(memDC, demoProcessCapture);
-    BitBlt(dc, 860, 50, CAPTURE_WIDTH, CAPTURE_HEIGHT, memDC , 0, 0, SRCCOPY);
-    SelectObject(memDC, oldObject);
-    DeleteDC(memDC);
+    Graphics graphics(dc);
+    graphics.DrawImage(fontPreviewImage, PointF(880, 50));
+}
+
+MetaString GDIPPPreview::GenerateTemporaryFileName() const
+{
+    TCHAR tempDirectory[MAX_PATH];
+
+    if (GetTempPath(MAX_PATH, tempDirectory) == 0)
+    {
+        throw std::runtime_error(
+            "GDIPPPreview::GenerateTemporaryFileName has failed. Unable to obtain temp directory.");
+    }
+
+    TCHAR tempFileName[MAX_PATH];
+
+    if (GetTempFileName(tempDirectory,
+        TEXT("demo_render"),
+        0,
+        tempFileName)
+        == 0)
+    {
+        throw std::runtime_error(
+            "GDIPPPreview::GenerateTemporaryFileName has failed. Unable to obtain temp filename.");
+    }
+
+    return MetaString(tempFileName);
 }

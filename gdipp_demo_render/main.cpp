@@ -43,6 +43,7 @@ INT APIENTRY WinMain(HINSTANCE thisInstance,
 #endif
 {
     DemoRender * demoRender = NULL;
+    const MetaString textToRender = TEXT("Demo Text !@#$%^&*()_+{ } ( )");
 
     try
     {
@@ -55,7 +56,7 @@ INT APIENTRY WinMain(HINSTANCE thisInstance,
         }
 
         demoRender = new DemoRender(outputFileName);
-        demoRender->RenderToFile(TEXT("Ala ma kota"));
+        demoRender->RenderToFile(textToRender);
         delete demoRender;
     }
     catch (const std::exception & e)

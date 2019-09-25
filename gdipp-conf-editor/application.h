@@ -77,7 +77,6 @@ namespace GDIPPConfigurationEditor
 
         // button click events
         void OnClickSaveConfiguration();
-        void OnClickUpdatePreview();
         void OnClickAbout();
         void OnClickHelp();
     };

@@ -25,6 +25,7 @@
 
 #include "application.h"
 
+
 #if defined(UNICODE) || defined(_UNICODE)
 INT APIENTRY wWinMain(HINSTANCE thisInstance,
                      HINSTANCE prevInstance,

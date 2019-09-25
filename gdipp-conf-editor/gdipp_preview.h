@@ -23,6 +23,7 @@
 #pragma once
 
 #include <windows.h>
+#include <gdiplus.h>
 
 #include "local_types.h"
 
@@ -36,7 +37,9 @@ public:
 
 private:
     HWND targetWindow;
-    HBITMAP demoProcessCapture;
+    Gdiplus::Image * fontPreviewImage;
+    ULONG_PTR gdiplusToken;
 
-    PROCESS_INFORMATION StartGDIPPDemoProcess();
+    PROCESS_INFORMATION StartGDIPPDemoProcess(const MetaString & bitmapFileName);
+    MetaString GenerateTemporaryFileName() const;
 };
