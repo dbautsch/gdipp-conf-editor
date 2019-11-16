@@ -139,7 +139,7 @@ void DemoRender::RenderToFile(const MetaString & text)
             throw;
         }
 
-        Status status = bitmap->Save(outputFileName.c_str(), &bmpClsid);
+        Status status = bitmap->Save(Util::MetaStringToUnicode(outputFileName).c_str(), &bmpClsid);
 
         delete bitmap;
 
@@ -180,7 +180,7 @@ bool DemoRender::GetEncoderClsid(const MetaString & format, CLSID * clsid) const
 
     for(UINT j = 0; j < num; ++j)
     {
-        if(MetaString(imageCodecInfo[j].MimeType) == format)
+        if(Util::CreateMetaString(imageCodecInfo[j].MimeType) == format)
         {
             *clsid = imageCodecInfo[j].Clsid;
             delete [] imageCodecInfo;

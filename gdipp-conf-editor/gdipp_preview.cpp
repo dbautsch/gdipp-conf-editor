@@ -89,7 +89,7 @@ void GDIPPPreview::UpdateView()
             fontPreviewImage = NULL;
         }
 
-        fontPreviewImage = Image::FromFile(bitmapFileName.c_str());
+        fontPreviewImage = Image::FromFile(Util::MetaStringToUnicode(bitmapFileName).c_str());
         DeleteFile(bitmapFileName.c_str());
         RedrawWindow(targetWindow, NULL, NULL, RDW_ERASE | RDW_INVALIDATE );
     }
