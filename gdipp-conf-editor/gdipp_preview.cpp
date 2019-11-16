@@ -74,6 +74,8 @@ void GDIPPPreview::UpdateView()
     PROCESS_INFORMATION demoProcess;
     MetaString bitmapFileName;
 
+	memset(&demoProcess, 0, sizeof(PROCESS_INFORMATION));
+
     try
     {
         bitmapFileName = GenerateTemporaryFileName();
@@ -108,7 +110,7 @@ void GDIPPPreview::UpdateView()
         DeleteFile(bitmapFileName.c_str());
         std::cerr << e.what() << std::endl;
 
-        throw std::runtime_error("Unable to generate preview.");
+        throw std::runtime_error(std::string("Unable to generate preview. (") + e.what() + ")");
     }
 }
 
@@ -122,7 +124,7 @@ PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess(const MetaString & bitma
     
     startupInfo.cb = sizeof(STARTUPINFO);
     
-    MetaString demoImageName = TEXT("C:\\SOURCE\\gdipp-conf-editor\\debug\\gdipp_demo_render.exe");
+	MetaString demoImageName = Util::GetCurrentProcessImagePath() + TEXT("gdipp-demo-render.exe");
 
     MetaString commandLineStr = TEXT("output=\"");
     commandLineStr += bitmapFileName;
@@ -143,7 +145,12 @@ PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess(const MetaString & bitma
                       &processInfo) != TRUE)
     {
         delete [] commandLine;
-        throw std::runtime_error("Unable to start gdipp_demo_render.exe process.");
+		DWORD lastError = GetLastError();
+		std::stringstream stream;
+		stream << "Last error: " << lastError;
+
+        throw std::runtime_error(std::string("Unable to start gdipp_demo_render.exe process. ")
+			+ stream.str());
     }
 
     delete [] commandLine;

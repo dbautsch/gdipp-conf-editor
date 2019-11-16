@@ -48,4 +48,6 @@ namespace Util
     extern std::string MetaStringToAnsi(const MetaString & input);
 
     extern std::wstring MetaStringToUnicode(const MetaString & input);
+
+	extern MetaString GetCurrentProcessImagePath();
 }

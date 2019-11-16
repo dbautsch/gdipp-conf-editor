@@ -174,4 +174,29 @@ namespace Util
         return AnsiToUnicode(input);
 #endif
     }
+
+	MetaString GetCurrentProcessImagePath()
+	{
+		/*
+		*	Get the complete path of image of the current running process.
+		*	The result is including last path terminator.
+		*/
+
+		TCHAR processImageName[MAX_PATH];
+
+		if (GetModuleFileName(NULL, processImageName, MAX_PATH) > 0)
+		{
+			MetaString completeName = processImageName;
+			size_t delimPos = completeName.rfind(TEXT("\\"));
+
+			if (delimPos != MetaString::npos)
+			{
+				MetaString result = completeName.substr(0, delimPos + 1);
+
+				return result;
+			}
+		}
+
+		return MetaString();
+	}
 } // namespace Util

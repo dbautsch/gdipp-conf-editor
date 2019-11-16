@@ -389,11 +389,22 @@ namespace GDIPPConfigurationEditor
 
     void Application::OnShowMainWindow()
     {
-        InitializeGUI();
-        ApplyValuesToControls(values);
+		try
+		{
+			InitializeGUI();
+			ApplyValuesToControls(values);
+			preview = new GDIPPPreview(hwnd);
+			preview->UpdateView();
+		}
+		catch (const std::runtime_error & e )
+		{
+			MessageBox(hwnd,
+				Util::CreateMetaString(e.what()).c_str(),
+				TEXT("Error"),
+				MB_ICONERROR);
 
-        preview = new GDIPPPreview(hwnd);
-        preview->UpdateView();
+			PostQuitMessage(-1);
+		}
     }
 
     void Application::OnClose()
