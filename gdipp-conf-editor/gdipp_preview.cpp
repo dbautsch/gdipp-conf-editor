@@ -169,7 +169,7 @@ void GDIPPPreview::DrawWidgetToDC(HDC dc)
     }
 
     Graphics graphics(dc);
-    graphics.DrawImage(fontPreviewImage, PointF(880, 50));
+    graphics.DrawImage(fontPreviewImage, PointF(800, 50));
 }
 
 MetaString GDIPPPreview::GenerateTemporaryFileName() const

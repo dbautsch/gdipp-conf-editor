@@ -94,6 +94,18 @@ void DemoRender::RenderToFile(const MetaString & text)
 
     SetDlgItemText(hwnd, IDC_STATIC1, text.c_str());
 
+	SendDlgItemMessage(hwnd,
+		IDC_TEST_LISTBOX,
+		LB_ADDSTRING,
+		NULL,
+		reinterpret_cast<WPARAM>(TEXT("ABCDEFGHIJKLMNOPQRSTUWXYZ")));
+
+	SendDlgItemMessage(hwnd,
+		IDC_TEST_LISTBOX,
+		LB_ADDSTRING,
+		NULL,
+		reinterpret_cast<WPARAM>(TEXT("0123456789")));
+
     ShowWindow(hwnd, SW_HIDE);
 
     // trigger window printing
