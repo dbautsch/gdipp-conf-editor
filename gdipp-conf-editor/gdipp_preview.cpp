@@ -131,7 +131,7 @@ PROCESS_INFORMATION GDIPPPreview::StartGDIPPDemoProcess(const MetaString & bitma
     commandLineStr += TEXT("\"");
 
     TCHAR * commandLine = new TCHAR[commandLineStr.length() + 1];
-    _tcscpy(commandLine, commandLineStr.c_str());
+	_tcscpy_s(commandLine, commandLineStr.length(), commandLineStr.c_str());
 
     if (CreateProcess(demoImageName.c_str(),
                       commandLine,

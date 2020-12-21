@@ -25,6 +25,7 @@
 #include <sstream>
 
 #include <windows.h>
+#include <iostream>
 
 namespace Util
 {
@@ -81,6 +82,8 @@ namespace Util
         }
         catch (const std::exception & e)
         {
+			std::cerr << "UnicodeToAnsi: " << e.what() << std::endl;
+
             if (buffer)
             {
                 delete [] buffer;
@@ -125,6 +128,8 @@ namespace Util
        }
        catch (const std::exception & e)
        {
+		   std::cerr << "AnsiToUnicode: " << e.what() << std::endl;
+
            if (buffer)
            {
                delete [] buffer;
